@@ -2,6 +2,10 @@
 
 Bu kılavuz, Shopiwise Ödeme Geçidi eklentisinin WordPress sitenize nasıl kurulacağını ve yapılandırılacağını açıklar.
 
+## İndir
+
+[Eklentiyi buradan indirebilirsiniz](./shopiwise-pay-wp.zip)
+
 ## Kurulum
 
 1. Eklenti dosyalarını `/wp-content/plugins/shopiwise-payment-gateway` dizinine yükleyin
@@ -27,28 +31,9 @@ Bu kılavuz, Shopiwise Ödeme Geçidi eklentisinin WordPress sitenize nasıl kur
    - **Açıklama**: Müşterinin ödeme sırasında göreceği açıklama
    - **API Anahtarı**: Shopiwise hesabınızdan aldığınız API anahtarı
    - **Mağaza ID**: Shopiwise hesabınızdan aldığınız Mağaza ID
-   - **Test Modu**: Gerçek ödemeler almadan önce test etmek için etkinleştirin
    - **Debug Modu**: Sorun giderme için işlem loglarını kaydetmek için etkinleştirin
 4. "Değişiklikleri Kaydet" düğmesine tıklayın
 
-## Test Etme
-
-1. Test modunu etkinleştirin
-2. Test bir sipariş oluşturun
-3. Ödeme yöntemi olarak "Shopiwise ile Güvenli Ödeme" seçeneğini seçin
-4. Siparişi tamamlayın
-5. Shopiwise ödeme sayfasına yönlendirileceksiniz
-6. Test kredi kartı bilgilerini girin ve ödemeyi tamamlayın
-7. Ödeme başarılı olduğunda, sitenize geri yönlendirileceksiniz ve sipariş durumu güncellenecektir
-
-### Test Kredi Kartı Bilgileri
-
-Test modunda aşağıdaki kredi kartı bilgilerini kullanabilirsiniz:
-
-- **Kart Numarası**: 4355 0843 5508 4355
-- **Son Kullanma Tarihi**: Gelecekteki herhangi bir tarih (örn. 12/30)
-- **CVV**: 000
-- **Kart Sahibi**: TEST
 
 ## Canlı Kullanım
 
@@ -63,7 +48,7 @@ Eklenti ile ilgili sorunlar yaşıyorsanız:
 1. Debug modunu etkinleştirin
 2. WooCommerce > Durum > Loglar sayfasından "shopiwise-payment" loglarını kontrol edin
 3. Shopiwise API bağlantınızı "Shopiwise Ödeme" sayfasından test edin
-4. Sorun devam ederse, [destek sayfamızı](https://shopiwise.net/support) ziyaret edin
+4. Sorun devam ederse, [destek sayfamızı](https://shopiwise.net/cr/help) ziyaret edin
 
 ## Güvenlik
 
@@ -75,6 +60,4 @@ Eklenti ile ilgili sorunlar yaşıyorsanız:
 
 Eklenti ile ilgili sorularınız veya sorunlarınız için:
 
-- [Dokümantasyon](https://shopiwise.net/docs)
-- [Destek](https://shopiwise.net/support)
-- E-posta: support@shopiwise.net 
+- [Destek](https://shopiwise.net/cr/help)

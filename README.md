@@ -13,7 +13,6 @@ Shopiwise Payment Gateway, WordPress WooCommerce sitenizde Shopiwise ödeme sist
 - Kredi kartı ile ödeme
 - Taksitli ödeme desteği
 - Otomatik sipariş durumu güncelleme
-- Test modu
 
 ## İndir
 
@@ -44,20 +43,9 @@ Shopiwise Payment Gateway, WordPress WooCommerce sitenizde Shopiwise ödeme sist
 
 ## Sık Sorulan Sorular
 
-### Test modunu nasıl kullanabilirim?
+### Ödeme iptalini nasıl yaparım?
 
-Eklenti ayarlarından "Test Modu"nu etkinleştirerek gerçek ödemeler almadan önce ödeme sistemini test edebilirsiniz.
-
-### Ödeme işlemi nasıl çalışır?
-
-1. Müşteri siparişini tamamlar ve ödeme için "Shopiwise ile Güvenli Ödeme" seçeneğini seçer
-2. Müşteri, Shopiwise güvenli ödeme sayfasına yönlendirilir
-3. Müşteri, kredi kartı bilgilerini girer ve ödemeyi tamamlar
-4. Ödeme başarılı olduğunda, müşteri sitenize geri yönlendirilir ve sipariş durumu güncellenir
-
-### Ödeme işlemi başarısız olursa ne olur?
-
-Ödeme işlemi başarısız olursa, müşteri sitenize geri yönlendirilir ve sipariş durumu "Başarısız" olarak güncellenir. Müşteri, ödeme işlemini tekrar deneyebilir.
+Ödeme iade ve iptal işlemleri Shopiwise.net mağaza panelinizde Muhasebe bölümünden yapılmaktadır. 
 
 ## Destek
 
