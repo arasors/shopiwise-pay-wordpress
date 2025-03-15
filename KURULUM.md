@@ -4,7 +4,7 @@ Bu kılavuz, Shopiwise Ödeme Geçidi eklentisinin WordPress sitenize nasıl kur
 
 ## İndir
 
-[Eklentiyi buradan indirebilirsiniz](./shopiwise-pay-wp.zip)
+[Eklentiyi buradan indirebilirsiniz](https://raw.githubusercontent.com/arasors/shopiwise-pay-wordpress/refs/heads/main/shopiwise-pay-wp.zip)
 
 ## Kurulum
 

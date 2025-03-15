@@ -16,7 +16,7 @@ Shopiwise Payment Gateway, WordPress WooCommerce sitenizde Shopiwise ödeme sist
 
 ## İndir
 
-[Eklentiyi buradan indirebilirsiniz](./shopiwise-pay-wp.zip)
+[Eklentiyi buradan indirebilirsiniz](https://raw.githubusercontent.com/arasors/shopiwise-pay-wordpress/refs/heads/main/shopiwise-pay-wp.zip)
 
 ## Kurulum
 
