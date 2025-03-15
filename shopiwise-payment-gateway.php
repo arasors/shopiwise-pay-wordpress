@@ -2,16 +2,18 @@
 /**
  * Plugin Name: Shopiwise Payment Gateway
  * Plugin URI: https://shopiwise.net
- * Description: Shopiwise ödeme geçidi entegrasyonu ile WordPress WooCommerce sitenizde güvenli ödeme alın.
+ * Description: Take secure payments on your WordPress WooCommerce site with Shopiwise payment gateway integration.
  * Version: 1.0.0
  * Author: Shopiwise
- * Author URI: https://shopiwise.net
- * Text Domain: shopiwise-payment
+ * Author URI: https://github.com/arasors
+ * Text Domain: shopiwise-payment-gateway
  * Domain Path: /languages
  * Requires at least: 5.0
  * Requires PHP: 7.2
  * WC requires at least: 4.0
- * WC tested up to: 8.0
+ * WC tested up to: 6.7
+ * License: GPL-2.0+
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 if (!defined('ABSPATH')) {
