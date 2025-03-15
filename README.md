@@ -15,12 +15,18 @@ Shopiwise Payment Gateway, WordPress WooCommerce sitenizde Shopiwise ödeme sist
 - Otomatik sipariş durumu güncelleme
 - Test modu
 
+## İndir
+
+[Eklentiyi buradan indirebilirsiniz](./shopiwise-pay-wp.zip)
+
 ## Kurulum
 
 1. Eklenti dosyalarını `/wp-content/plugins/shopiwise-payment-gateway` dizinine yükleyin
 2. WordPress admin panelinden eklentiyi etkinleştirin
 3. WooCommerce ayarlarından "Ödeme" sekmesine gidin
 4. "Shopiwise ile Güvenli Ödeme" seçeneğini etkinleştirin ve ayarları yapılandırın
+
+[Kurulum talimatları için buraya tıklayın](./KURULUM.md)
 
 ## Gereksinimler
 
@@ -55,8 +61,9 @@ Eklenti ayarlarından "Test Modu"nu etkinleştirerek gerçek ödemeler almadan �
 
 ## Destek
 
-Eklenti ile ilgili sorunlarınız için [destek sayfamızı](https://shopiwise.net/support) ziyaret edebilirsiniz.
+Eklenti ile ilgili sorunlarınız için [destek sayfamızı](https://shopiwise.net/cr/help) ziyaret edebilirsiniz.
 
 ## Lisans
 
-Bu eklenti, GPL v2 veya sonraki sürümler altında lisanslanmıştır. 
+Bu eklenti, GPL v2 veya sonraki sürümler altında lisanslanmıştır.
+
