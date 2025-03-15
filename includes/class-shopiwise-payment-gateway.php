@@ -77,7 +77,7 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
         $this->store_id           = $this->get_option('store_id');
         
         // API URL'sini ayarla
-        $this->api_url = $this->test_mode ? 'https://test-api.shopiwise.net' : 'https://api.shopiwise.net';
+        $this->api_url = $this->test_mode ? 'http://192.168.1.73:3000' : 'https://shopiwise.net';
 
         // Ayarları kaydetme hook'u
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
@@ -154,29 +154,62 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
      * Ödeme işlemi
      */
     public function process_payment($order_id) {
+        if ($this->debug_mode) {
+            $this->log('Ödeme işlemi başlatılıyor. Sipariş ID: ' . $order_id);
+        }
+        
         $order = wc_get_order($order_id);
         
         // Sipariş verilerini hazırla
         $order_data = $this->prepare_order_data($order);
         
+        if ($this->debug_mode) {
+            $this->log('Sipariş verileri hazırlandı: ' . print_r($order_data, true));
+        }
+        
         // Shopiwise'a sipariş gönder
         $response = $this->create_shopiwise_order($order_data);
         
+        if ($this->debug_mode) {
+            $this->log('Shopiwise yanıtı: ' . print_r($response, true));
+        }
+        
         if ($response && isset($response['success']) && $response['success'] && isset($response['order_id'])) {
+            if ($this->debug_mode) {
+                $this->log('Sipariş başarıyla oluşturuldu. Shopiwise Sipariş ID: ' . $response['order_id']);
+            }
+            
             // Siparişi beklemede olarak işaretle
             $order->update_status('on-hold', __('Shopiwise ödeme bekleniyor.', 'shopiwise-payment'));
+            
+            // Sipariş notuna Shopiwise sipariş ID'sini ekle
+            $order->add_order_note(sprintf(__('Shopiwise Sipariş ID: %s', 'shopiwise-payment'), $response['order_id']));
             
             // Sepeti boşalt
             WC()->cart->empty_cart();
             
+            // Ödeme URL'sini oluştur
+            $payment_url = $this->get_payment_url($response['order_id']);
+            
+            if ($this->debug_mode) {
+                $this->log('Ödeme URL: ' . $payment_url);
+            }
+            
             // Shopiwise ödeme sayfasına yönlendir
             return array(
                 'result'   => 'success',
-                'redirect' => $this->get_payment_url($response['order_id'])
+                'redirect' => $payment_url
             );
         } else {
+            // Hata mesajını logla
+            if ($this->debug_mode) {
+                $this->log('Ödeme işlemi başlatılamadı. Yanıt: ' . print_r($response, true));
+            }
+            
             // Hata mesajı göster
-            wc_add_notice(__('Ödeme işlemi başlatılamadı. Lütfen tekrar deneyin.', 'shopiwise-payment'), 'error');
+            $error_message = isset($response['message']) ? $response['message'] : __('Ödeme işlemi başlatılamadı. Lütfen tekrar deneyin.', 'shopiwise-payment');
+            wc_add_notice($error_message, 'error');
+            
             return array(
                 'result'   => 'fail',
                 'redirect' => ''
@@ -193,13 +226,28 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
         // Ürünleri hazırla
         foreach ($order->get_items() as $item) {
             $product = $item->get_product();
-            $items[] = array(
+            $product_data = array(
                 'id'       => $product->get_id(),
                 'name'     => $item->get_name(),
                 'quantity' => $item->get_quantity(),
                 'price'    => $order->get_item_total($item, false),
-                'options'  => $this->get_item_options($item)
+                'options'  => $this->get_item_options($item),
+                'isGift'   => false,
+                'image'    => 'https://avatar.vercel.sh/next.js',
+                'totalPrice' => $order->get_item_total($item, false) * $item->get_quantity(),
+                'type'     => 'physically'
             );
+            
+            // Ürün resmi ekle
+            $image_id = $product->get_image_id();
+            if ($image_id) {
+                $image_url = wp_get_attachment_image_url($image_id, 'medium');
+                if ($image_url) {
+                    $product_data['image'] = $image_url;
+                }
+            }
+            
+            $items[] = $product_data;
         }
         
         // Müşteri bilgilerini hazırla
@@ -208,22 +256,41 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
             'lastName'     => $order->get_billing_last_name(),
             'email'        => $order->get_billing_email(),
             'phoneNumber'  => $order->get_billing_phone(),
-            'country'      => $order->get_billing_country(),
+            'country'      => strtolower($order->get_billing_country()),
             'city'         => $order->get_billing_city(),
             'district'     => $order->get_billing_state(),
             'neighborhood' => $order->get_billing_address_1(),
             'street'       => $order->get_billing_address_2(),
             'buildingNo'   => '',
+            'apartmentNo'  => '',
+            'addressDetails' => '',
             'zipCode'      => $order->get_billing_postcode(),
+            'phoneAreaCode' => '',
+            'isDigitalDelivery' => false,
+            'emailForDelivery' => '',
+            'paymentInfoCompleted' => true,
+            'paymentInfoModal' => false,
+            'noCreateAccount' => 'true',
+            'language' => 'tr-TR'
         );
         
         // Sepet tutarlarını hazırla
+        $subtotal = $order->get_subtotal();
+        $total = $order->get_total();
+        $discount = $order->get_discount_total();
+        $shipping = $order->get_shipping_total();
+        
         $basket_amount = array(
-            'subTotal' => $order->get_subtotal(),
-            'shipping' => $order->get_shipping_total(),
-            'discount' => $order->get_discount_total(),
-            'total'    => $order->get_total(),
-            'currency' => $order->get_currency()
+            'subTotal' => $subtotal,
+            'shipping' => $shipping,
+            'discount' => $discount > 0 ? $discount : 0,
+            'total'    => $total,
+            'amount'   => $subtotal + $shipping,
+            'volume'   => 'volume1',
+            'currency' => $order->get_currency(),
+            'currentTotal' => round($total / 35, 1), // Total bölü 35
+            'walletOff' => 0,
+            'amountOff' => 0
         );
         
         // Sipariş verilerini hazırla
@@ -233,13 +300,22 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
             'products'      => $items,
             'basketAmount'  => $basket_amount,
             'paymentMethod' => 'creditCard',
+            'paymentStatus' => false,
+            'installment'   => 1,
             'returnUrl'     => $this->get_return_url($order),
             'cancelUrl'     => $order->get_cancel_order_url(),
             'callbackUrl'   => WC()->api_request_url('WC_Shopiwise_Payment_Gateway'),
+            'site'          => get_site_url(),
+            'referer'       => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : get_site_url(),
+            'nanoid'        => wp_generate_uuid4()
         );
         
         // Müşteri bilgilerini ekle
         $order_data = array_merge($order_data, $customer_data);
+        
+        if ($this->debug_mode) {
+            $this->log('Hazırlanan sipariş verileri: ' . print_r($order_data, true));
+        }
         
         return $order_data;
     }
@@ -257,9 +333,40 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
                 foreach ($variation->get_attributes() as $attribute => $value) {
                     $taxonomy = str_replace('attribute_', '', $attribute);
                     $term = get_term_by('slug', $value, $taxonomy);
-                    $options[] = array(
-                        'title' => wc_attribute_label($taxonomy),
-                        'name'  => $term ? $term->name : $value
+                    
+                    // Benzersiz bir ID oluştur
+                    $option_id = wp_generate_uuid4();
+                    $title_id = wp_generate_uuid4();
+                    
+                    $option_name = $term ? $term->name : $value;
+                    $option_title = wc_attribute_label($taxonomy);
+                    
+                    // Shopiwise formatında seçenek ekle
+                    $options[$title_id] = array(
+                        'id' => $option_id,
+                        'name' => $option_name,
+                        'title' => $option_title,
+                        'price' => 0
+                    );
+                }
+            }
+        }
+        
+        // Özel seçenekleri ekle (örn: ürün eklentileri)
+        $meta_data = $item->get_meta_data();
+        if (!empty($meta_data)) {
+            foreach ($meta_data as $meta) {
+                if (!empty($meta->key) && !empty($meta->value) && substr($meta->key, 0, 1) !== '_') {
+                    // Benzersiz bir ID oluştur
+                    $option_id = wp_generate_uuid4();
+                    $title_id = wp_generate_uuid4();
+                    
+                    // Shopiwise formatında seçenek ekle
+                    $options[$title_id] = array(
+                        'id' => $option_id,
+                        'name' => $meta->value,
+                        'title' => $meta->key,
+                        'price' => 0
                     );
                 }
             }
@@ -272,8 +379,18 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
      * Shopiwise'a sipariş gönder
      */
     private function create_shopiwise_order($order_data) {
+        $api_endpoint = $this->api_url . '/service/order';
+        
+        // İstek verilerini logla
+        if ($this->debug_mode) {
+            $this->log('Sipariş oluşturma isteği URL: ' . $api_endpoint);
+            $this->log('Sipariş oluşturma isteği verileri: ' . print_r($order_data, true));
+            $this->log('API Anahtarı: ' . substr($this->api_key, 0, 5) . '...' . substr($this->api_key, -5));
+            $this->log('Mağaza ID: ' . $this->store_id);
+        }
+        
         $response = wp_remote_post(
-            $this->api_url . '/api/service/order',
+            $api_endpoint,
             array(
                 'method'      => 'POST',
                 'timeout'     => 45,
@@ -293,63 +410,131 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
         if (is_wp_error($response)) {
             if ($this->debug_mode) {
                 $this->log('Sipariş oluşturma hatası: ' . $response->get_error_message());
+                $this->log('Hata kodu: ' . $response->get_error_code());
             }
             return false;
         }
         
+        $status_code = wp_remote_retrieve_response_code($response);
         $body = json_decode(wp_remote_retrieve_body($response), true);
         
         if ($this->debug_mode) {
+            $this->log('Sipariş oluşturma yanıtı HTTP kodu: ' . $status_code);
             $this->log('Sipariş oluşturma yanıtı: ' . print_r($body, true));
+            $this->log('Tam yanıt: ' . print_r($response, true));
+        }
+        
+        // HTTP durum kodu 200 değilse hata logla
+        if ($status_code !== 200) {
+            if ($this->debug_mode) {
+                $this->log('Sipariş oluşturma başarısız. HTTP kodu: ' . $status_code);
+                $this->log('Yanıt başlıkları: ' . print_r(wp_remote_retrieve_headers($response), true));
+            }
         }
         
         return $body;
     }
 
     /**
-     * Shopiwise ödeme URL'sini al
+     * Ödeme URL'sini oluştur
      */
     private function get_payment_url($order_id) {
-        return $this->api_url . '/pay/' . $order_id . '?sid=' . $this->store_id;
+        if ($this->debug_mode) {
+            $this->log('Ödeme URL oluşturuluyor. Shopiwise Sipariş ID: ' . $order_id);
+        }
+        
+        // API URL'sinden domain kısmını al
+        $domain = preg_replace('/\/api$/', '', $this->api_url);
+        $payment_url = $domain . '/pay/' . $order_id . '?sid=' . $this->store_id;
+        
+        if ($this->debug_mode) {
+            $this->log('Oluşturulan ödeme URL: ' . $payment_url);
+        }
+        
+        return $payment_url;
     }
 
     /**
      * Ödeme sonucu kontrolü
      */
     public function check_response() {
+        if ($this->debug_mode) {
+            $this->log('Callback yanıtı alındı. POST verileri: ' . print_r($_POST, true));
+            $this->log('GET verileri: ' . print_r($_GET, true));
+            $this->log('Tüm istek başlıkları: ' . print_r(getallheaders(), true));
+        }
+        
         $data = $_POST;
         
-        if ($this->debug_mode) {
-            $this->log('Callback yanıtı: ' . print_r($data, true));
+        if (empty($data)) {
+            $json_data = file_get_contents('php://input');
+            if (!empty($json_data)) {
+                $data = json_decode($json_data, true);
+                if ($this->debug_mode) {
+                    $this->log('JSON verisi alındı: ' . $json_data);
+                    $this->log('Çözümlenmiş JSON verisi: ' . print_r($data, true));
+                }
+            }
         }
         
         if (isset($data['order_id']) && isset($data['status'])) {
             $order_id = $data['order_id'];
             $status = $data['status'];
+            
+            if ($this->debug_mode) {
+                $this->log('Sipariş ID: ' . $order_id . ', Durum: ' . $status);
+            }
+            
             $order = wc_get_order($order_id);
             
             if (!$order) {
                 if ($this->debug_mode) {
                     $this->log('Sipariş bulunamadı: ' . $order_id);
                 }
+                echo json_encode(['success' => false, 'message' => 'Sipariş bulunamadı']);
                 exit;
             }
             
             if ($status === 'SUCCESS') {
                 // Ödeme başarılı
+                if ($this->debug_mode) {
+                    $this->log('Ödeme başarılı. Sipariş tamamlanıyor: ' . $order_id);
+                }
+                
                 $order->payment_complete();
                 $order->add_order_note(__('Shopiwise ödeme başarılı.', 'shopiwise-payment'));
                 
                 // Başarılı ödeme sonrası yönlendirme
                 $redirect_url = $this->get_return_url($order);
+                
+                if ($this->debug_mode) {
+                    $this->log('Başarılı ödeme sonrası yönlendirme URL: ' . $redirect_url);
+                }
+                
+                echo json_encode(['success' => true, 'message' => 'Ödeme başarılı']);
+                
                 wp_redirect($redirect_url);
                 exit;
             } else {
                 // Ödeme başarısız
+                if ($this->debug_mode) {
+                    $this->log('Ödeme başarısız. Durum: ' . $status . ', Sipariş ID: ' . $order_id);
+                    if (isset($data['error_message'])) {
+                        $this->log('Hata mesajı: ' . $data['error_message']);
+                    }
+                }
+                
                 $order->update_status('failed', __('Shopiwise ödeme başarısız.', 'shopiwise-payment'));
                 
                 // Başarısız ödeme sonrası yönlendirme
-                $redirect_url = $order->get_cancel_order_url();
+                $redirect_url = wc_get_checkout_url();
+                
+                if ($this->debug_mode) {
+                    $this->log('Başarısız ödeme sonrası yönlendirme URL: ' . $redirect_url);
+                }
+                
+                echo json_encode(['success' => false, 'message' => 'Ödeme başarısız']);
+                
                 wp_redirect($redirect_url);
                 exit;
             }
@@ -359,12 +544,31 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
     }
 
     /**
-     * Log kaydet
+     * Log mesajı
      */
     private function log($message) {
         if ($this->debug_mode) {
+            if (!is_string($message)) {
+                $message = print_r($message, true);
+            }
+            
             $logger = wc_get_logger();
-            $logger->info($message, array('source' => 'shopiwise-payment'));
+            $context = array('source' => 'shopiwise-payment');
+            
+            // Tarih ve saat ekle
+            $timestamp = date('Y-m-d H:i:s');
+            $formatted_message = "[{$timestamp}] {$message}";
+            
+            $logger->debug($formatted_message, $context);
+            
+            // Ayrıca özel log dosyasına da yaz
+            $log_dir = WP_CONTENT_DIR . '/shopiwise-logs';
+            if (!file_exists($log_dir)) {
+                wp_mkdir_p($log_dir);
+            }
+            
+            $log_file = $log_dir . '/shopiwise-payment-' . date('Y-m-d') . '.log';
+            error_log($formatted_message . "\n", 3, $log_file);
         }
     }
 } 

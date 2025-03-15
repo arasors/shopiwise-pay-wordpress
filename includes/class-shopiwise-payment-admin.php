@@ -146,8 +146,9 @@ class WC_Shopiwise_Payment_Admin {
             return;
         }
         
+        // $test_mode ? 'https://test-api.shopiwise.net' : 
         $test_mode = isset($settings['test_mode']) && 'yes' === $settings['test_mode'];
-        $api_url = $test_mode ? 'https://test-api.shopiwise.net' : 'https://api.shopiwise.net';
+        $api_url = 'https://shopiwise.net/api';
         
         $response = wp_remote_get(
             $api_url . '/api/v1/store',
