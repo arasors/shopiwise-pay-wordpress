@@ -77,7 +77,7 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
         $this->store_id           = $this->get_option('store_id');
         
         // API URL'sini ayarla
-        $this->api_url = $this->test_mode ? 'http://192.168.1.73:3000' : 'https://shopiwise.net';
+        $this->api_url = 'https://shopiwise.net';
 
         // Ayarları kaydetme hook'u
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
@@ -280,11 +280,23 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
         $discount = $order->get_discount_total();
         $shipping = $order->get_shipping_total();
         
+        // Total değeri, indirim ve kargo giderlerini düşünce kalan tutarı ifade etmeli
+        $net_total = $subtotal - ($discount > 0 ? $discount : 0);
+        
+        if ($this->debug_mode) {
+            $this->log('Sepet tutarları hesaplanıyor:');
+            $this->log('Alt Toplam (subTotal): ' . $subtotal);
+            $this->log('İndirim (discount): ' . $discount);
+            $this->log('Kargo (shipping): ' . $shipping);
+            $this->log('Toplam (WooCommerce total): ' . $total);
+            $this->log('Net Toplam (indirim düşülmüş): ' . $net_total);
+        }
+        
         $basket_amount = array(
             'subTotal' => $subtotal,
-            'shipping' => $shipping,
+            'shipping' => $shipping > 0 ? $shipping : 0,
             'discount' => $discount > 0 ? $discount : 0,
-            'total'    => $total,
+            'total'    => $net_total, // İndirim düşülmüş tutar
             'amount'   => $subtotal + $shipping,
             'volume'   => 'volume1',
             'currency' => $order->get_currency(),
@@ -379,7 +391,7 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
      * Shopiwise'a sipariş gönder
      */
     private function create_shopiwise_order($order_data) {
-        $api_endpoint = $this->api_url . '/service/order';
+        $api_endpoint = $this->api_url . '/api/service/order';
         
         // İstek verilerini logla
         if ($this->debug_mode) {
