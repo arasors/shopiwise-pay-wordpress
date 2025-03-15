@@ -1,0 +1,187 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Shopiwise Payment Gateway 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/shopiwise-payment-gateway\n"
+"POT-Creation-Date: 2023-01-01T00:00:00+00:00\n"
+"PO-Revision-Date: 2023-01-01T00:00:00+00:00\n"
+"Last-Translator: Shopiwise Team\n"
+"Language-Team: Türkçe <info@shopiwise.net>\n"
+"Language: tr_TR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0\n"
+"X-Domain: shopiwise-payment\n"
+
+#: shopiwise-payment-gateway.php:39
+msgid "Shopiwise Payment Gateway için WooCommerce eklentisinin yüklü ve aktif olması gerekiyor."
+msgstr "Shopiwise Payment Gateway için WooCommerce eklentisinin yüklü ve aktif olması gerekiyor."
+
+#: includes/class-shopiwise-payment-gateway.php:36
+msgid "Shopiwise Ödeme"
+msgstr "Shopiwise Ödeme"
+
+#: includes/class-shopiwise-payment-gateway.php:37
+msgid "Shopiwise ödeme geçidi ile ödemeleri güvenle alın."
+msgstr "Shopiwise ödeme geçidi ile ödemeleri güvenle alın."
+
+#: includes/class-shopiwise-payment-gateway.php:58
+msgid "Etkinleştir/Devre Dışı Bırak"
+msgstr "Etkinleştir/Devre Dışı Bırak"
+
+#: includes/class-shopiwise-payment-gateway.php:60
+msgid "Shopiwise Ödeme Geçidini Etkinleştir"
+msgstr "Shopiwise Ödeme Geçidini Etkinleştir"
+
+#: includes/class-shopiwise-payment-gateway.php:64
+msgid "Başlık"
+msgstr "Başlık"
+
+#: includes/class-shopiwise-payment-gateway.php:66
+msgid "Müşterinin ödeme sırasında göreceği başlık."
+msgstr "Müşterinin ödeme sırasında göreceği başlık."
+
+#: includes/class-shopiwise-payment-gateway.php:67
+msgid "Shopiwise ile Güvenli Ödeme"
+msgstr "Shopiwise ile Güvenli Ödeme"
+
+#: includes/class-shopiwise-payment-gateway.php:71
+msgid "Açıklama"
+msgstr "Açıklama"
+
+#: includes/class-shopiwise-payment-gateway.php:73
+msgid "Müşterinin ödeme sırasında göreceği açıklama."
+msgstr "Müşterinin ödeme sırasında göreceği açıklama."
+
+#: includes/class-shopiwise-payment-gateway.php:74
+msgid "Kredi kartı bilgileriniz Shopiwise güvenli ödeme sayfasında işlenecektir."
+msgstr "Kredi kartı bilgileriniz Shopiwise güvenli ödeme sayfasında işlenecektir."
+
+#: includes/class-shopiwise-payment-gateway.php:78
+msgid "API Anahtarı"
+msgstr "API Anahtarı"
+
+#: includes/class-shopiwise-payment-gateway.php:80
+msgid "Shopiwise API anahtarınızı girin."
+msgstr "Shopiwise API anahtarınızı girin."
+
+#: includes/class-shopiwise-payment-gateway.php:85
+msgid "Mağaza ID"
+msgstr "Mağaza ID"
+
+#: includes/class-shopiwise-payment-gateway.php:87
+msgid "Shopiwise Mağaza ID'nizi girin."
+msgstr "Shopiwise Mağaza ID'nizi girin."
+
+#: includes/class-shopiwise-payment-gateway.php:92
+msgid "Test Modu"
+msgstr "Test Modu"
+
+#: includes/class-shopiwise-payment-gateway.php:94
+msgid "Test modunu etkinleştir"
+msgstr "Test modunu etkinleştir"
+
+#: includes/class-shopiwise-payment-gateway.php:96
+msgid "Test modunda gerçek ödemeler alınmaz."
+msgstr "Test modunda gerçek ödemeler alınmaz."
+
+#: includes/class-shopiwise-payment-gateway.php:99
+msgid "Debug Modu"
+msgstr "Debug Modu"
+
+#: includes/class-shopiwise-payment-gateway.php:101
+msgid "Debug modunu etkinleştir"
+msgstr "Debug modunu etkinleştir"
+
+#: includes/class-shopiwise-payment-gateway.php:103
+msgid "Debug modunda işlem logları kaydedilir."
+msgstr "Debug modunda işlem logları kaydedilir."
+
+#: includes/class-shopiwise-payment-gateway.php:139
+msgid "Shopiwise ödeme bekleniyor."
+msgstr "Shopiwise ödeme bekleniyor."
+
+#: includes/class-shopiwise-payment-gateway.php:150
+msgid "Ödeme işlemi başlatılamadı. Lütfen tekrar deneyin."
+msgstr "Ödeme işlemi başlatılamadı. Lütfen tekrar deneyin."
+
+#: includes/class-shopiwise-payment-gateway.php:293
+msgid "Shopiwise ödeme başarılı."
+msgstr "Shopiwise ödeme başarılı."
+
+#: includes/class-shopiwise-payment-gateway.php:296
+msgid "Shopiwise ödeme başarısız."
+msgstr "Shopiwise ödeme başarısız."
+
+#: includes/class-shopiwise-payment-admin.php:33
+msgid "Shopiwise Ödeme Geçidi Ayarları"
+msgstr "Shopiwise Ödeme Geçidi Ayarları"
+
+#: includes/class-shopiwise-payment-admin.php:36
+msgid "Bağlantı Durumu"
+msgstr "Bağlantı Durumu"
+
+#: includes/class-shopiwise-payment-admin.php:37
+msgid "Shopiwise API bağlantınızı test edin."
+msgstr "Shopiwise API bağlantınızı test edin."
+
+#: includes/class-shopiwise-payment-admin.php:39
+msgid "Bağlantıyı Test Et"
+msgstr "Bağlantıyı Test Et"
+
+#: includes/class-shopiwise-payment-admin.php:45
+msgid "Ödeme Geçidi Ayarları"
+msgstr "Ödeme Geçidi Ayarları"
+
+#: includes/class-shopiwise-payment-admin.php:46
+msgid "Ödeme geçidi ayarlarını WooCommerce ayarlarından yapabilirsiniz."
+msgstr "Ödeme geçidi ayarlarını WooCommerce ayarlarından yapabilirsiniz."
+
+#: includes/class-shopiwise-payment-admin.php:48
+msgid "Ödeme Geçidi Ayarlarına Git"
+msgstr "Ödeme Geçidi Ayarlarına Git"
+
+#: includes/class-shopiwise-payment-admin.php:53
+msgid "Yardım ve Destek"
+msgstr "Yardım ve Destek"
+
+#: includes/class-shopiwise-payment-admin.php:54
+msgid "Shopiwise ödeme geçidi hakkında yardım ve destek almak için aşağıdaki bağlantıları kullanabilirsiniz."
+msgstr "Shopiwise ödeme geçidi hakkında yardım ve destek almak için aşağıdaki bağlantıları kullanabilirsiniz."
+
+#: includes/class-shopiwise-payment-admin.php:56
+msgid "Dokümantasyon"
+msgstr "Dokümantasyon"
+
+#: includes/class-shopiwise-payment-admin.php:57
+msgid "Destek"
+msgstr "Destek"
+
+#: includes/class-shopiwise-payment-admin.php:76
+msgid "Shopiwise Ödeme Geçidi için API anahtarı ve Mağaza ID ayarlarını yapmanız gerekiyor. <a href=\"%s\">Ayarlar sayfasına git</a>."
+msgstr "Shopiwise Ödeme Geçidi için API anahtarı ve Mağaza ID ayarlarını yapmanız gerekiyor. <a href=\"%s\">Ayarlar sayfasına git</a>."
+
+#: includes/class-shopiwise-payment-admin.php:112
+msgid "Bağlantı test ediliyor..."
+msgstr "Bağlantı test ediliyor..."
+
+#: includes/class-shopiwise-payment-admin.php:113
+msgid "Bağlantı başarılı!"
+msgstr "Bağlantı başarılı!"
+
+#: includes/class-shopiwise-payment-admin.php:114
+msgid "Bağlantı hatası:"
+msgstr "Bağlantı hatası:"
+
+#: includes/class-shopiwise-payment-admin.php:133
+msgid "API anahtarı veya Mağaza ID ayarlanmamış."
+msgstr "API anahtarı veya Mağaza ID ayarlanmamış."
+
+#: includes/class-shopiwise-payment-admin.php:162
+msgid "Bilinmeyen hata."
+msgstr "Bilinmeyen hata."
+
+#: includes/class-shopiwise-payment-admin.php:165
+msgid "Bağlantı başarılı! Mağaza bilgileri alındı."
+msgstr "Bağlantı başarılı! Mağaza bilgileri alındı." 
