@@ -71,7 +71,7 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
         $this->title              = $this->get_option('title');
         $this->description        = $this->get_option('description');
         $this->enabled            = $this->get_option('enabled');
-        $this->test_mode          = 'yes' === $this->get_option('test_mode');
+        $this->test_mode          = 'no' === $this->get_option('test_mode');
         $this->debug_mode         = 'yes' === $this->get_option('debug_mode');
         $this->api_key            = $this->get_option('api_key');
         $this->store_id           = $this->get_option('store_id');
@@ -98,7 +98,7 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
                 'title'       => __('Etkinleştir/Devre Dışı Bırak', 'shopiwise-payment'),
                 'type'        => 'checkbox',
                 'label'       => __('Shopiwise Ödeme Geçidini Etkinleştir', 'shopiwise-payment'),
-                'default'     => 'no'
+                'default'     => 'yes'
             ),
             'title' => array(
                 'title'       => __('Başlık', 'shopiwise-payment'),
@@ -132,7 +132,7 @@ class WC_Shopiwise_Payment_Gateway extends WC_Payment_Gateway {
                 'title'       => __('Test Modu', 'shopiwise-payment'),
                 'type'        => 'checkbox',
                 'label'       => __('Test modunu etkinleştir', 'shopiwise-payment'),
-                'default'     => 'yes',
+                'default'     => 'no',
                 'description' => __('Test modunda gerçek ödeme alınmaz, sadece test amaçlı kullanılır.', 'shopiwise-payment'),
             ),
             'debug_mode' => array(

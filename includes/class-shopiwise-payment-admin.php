@@ -66,7 +66,7 @@ class WC_Shopiwise_Payment_Admin {
                 <h2><?php echo esc_html__('Ödeme Geçidi Ayarları', 'shopiwise-payment'); ?></h2>
                 <p><?php echo esc_html__('Ödeme geçidi ayarlarını WooCommerce ayarlarından yapabilirsiniz.', 'shopiwise-payment'); ?></p>
                 <a href="<?php echo esc_url(admin_url('admin.php?page=wc-settings&tab=checkout&section=shopiwise_payment')); ?>" class="button button-secondary">
-                    <?php echo esc_html__('Ödeme Geçidi Ayarlarına Git', 'shopiwise-payment'); ?>
+                    <?php echo esc_html__('Ayarlara Git', 'shopiwise-payment'); ?>
                 </a>
             </div>
             
@@ -74,8 +74,8 @@ class WC_Shopiwise_Payment_Admin {
                 <h2><?php echo esc_html__('Yardım ve Destek', 'shopiwise-payment'); ?></h2>
                 <p><?php echo esc_html__('Shopiwise ödeme geçidi hakkında yardım ve destek almak için aşağıdaki bağlantıları kullanabilirsiniz.', 'shopiwise-payment'); ?></p>
                 <ul>
-                    <li><a href="https://shopiwise.net/docs" target="_blank"><?php echo esc_html__('Dokümantasyon', 'shopiwise-payment'); ?></a></li>
-                    <li><a href="https://shopiwise.net/support" target="_blank"><?php echo esc_html__('Destek', 'shopiwise-payment'); ?></a></li>
+                    <li><a href="https://github.com/arasors/shopiwise-pay-wordpress" target="_blank"><?php echo esc_html__('Dokümantasyon', 'shopiwise-payment'); ?></a></li>
+                    <li><a href="https://shopiwise.net/cr/help" target="_blank"><?php echo esc_html__('Destek', 'shopiwise-payment'); ?></a></li>
                 </ul>
             </div>
         </div>

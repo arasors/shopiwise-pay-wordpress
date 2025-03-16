@@ -79,7 +79,7 @@ function shopiwise_payment_activate() {
         add_option('woocommerce_shopiwise_payment_settings', array(
             'api_key' => '',
             'store_id' => '',
-            'test_mode' => 'yes',
+            'test_mode' => 'no',
             'debug_mode' => 'no'
         ));
     }
